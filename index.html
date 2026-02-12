@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prince Portfolio</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://unpkg.com/scrollreveal"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
+
+    :root{
+      --accent-1: #22c55e;
+      --accent-2: #3b82f6;
+      --accent-3: #0ea5a4;
+      --bg-color: #0f1724;
+      --card-bg: rgba(255,255,255,0.03);
+      --text-main: #e6eef8;
+      --muted: #98a0b3;
+      --glass-border: rgba(255,255,255,0.05);
+      --header-gradient: linear-gradient(90deg,var(--accent-2),var(--accent-1));
+      --shadow: 0 10px 30px rgba(2,6,23,0.6);
+      --contact-gradient: linear-gradient(135deg,var(--accent-1),var(--accent-2));
+      --max-content-width: 1200px;
+      --base-font-size: 16px;
+      --heading-weight: 700;
+      --body-line-height: 1.45;
+      --muted-opacity: 0.78;
+
+      /* drawer-specific */
+      --drawer-width: 260px;
+      --drawer-bg-dark: #071226;
+      --drawer-bg-light: #ffffff;
+    }
+
+    body.lightmode{
+      --accent-1: #16a34a;
+      --accent-2: #2563eb;
+      --accent-3: #2dd4bf;
+      --bg-color: #ffffff;
+      --card-bg: rgba(2,6,23,0.03);
+      --text-main: #061226;
+      --muted: #516374;
+      --glass-border: rgba(2,6,23,0.06);
+      --header-gradient: linear-gradient(90deg, var(--accent-2) 0%, var(--accent-1) 50%, var(--accent-3) 100%);
+      --shadow: 0 10px 30px rgba(2,6,23,0.06);
+      --contact-gradient: linear-gradient(135deg,var(--accent-1),var(--accent-2));
+      --drawer-bg-dark: #ffffff;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body,html{min-height:100%;width:100%;font-family:Poppins, "Share Tech Mono", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg-color); color:var(--text-main); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;font-size:var(--base-font-size);line-height:var(--body-line-height)}
+    a{color:inherit}
+
+    header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:1000;background:var(--header-gradient);background-size:200% 200%;box-shadow:var(--shadow);border-bottom:1px solid rgba(255,255,255,0.03)}
+    .logo img{height:44px;width:auto;border-radius:8px;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.25))}
+    nav{display:flex;align-items:center}
+    nav ul{display:flex;gap:18px;list-style:none;align-items:center}
+    nav a{color:var(--text-main);text-decoration:none;font-weight:600;letter-spacing:0.6px;padding:8px 12px;border-radius:999px;transition:all .18s;font-size:0.95rem}
+    nav a.active, nav a:hover{background:var(--text-main);color:var(--bg-color);transform:translateY(-2px);box-shadow:0 8px 20px rgba(2,6,23,0.12)}
+
+    /* hamburger button base: hidden on desktop, shown on mobile via media query */
+    .menubutton{
+      display:none;
+      background:transparent;
+      border:none;
+      color:inherit;
+      padding:8px;
+      border-radius:8px;
+      cursor:pointer;
+      align-items:center;
+      justify-content:center;
+    }
+    .menubutton svg{ width:28px; height:28px; display:block; }
+
+    /* overlay (backdrop) */
+    .menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1050;opacity:0;pointer-events:none;transition:opacity .18s}
+    .menu-overlay.show{opacity:1;pointer-events:auto}
+
+    /* SIDEBAR / DRAWER (smaller and opaque) */
+    .sidebar{
+      position:fixed;
+      top:0;
+      right:calc(-1 * var(--drawer-width)); /* hidden by default off-screen */
+      height:100vh;
+      width:var(--drawer-width);
+      background: linear-gradient(180deg, var(--drawer-bg-dark), #02111b);
+      padding:78px 18px; /* leave room for header */
+      transition:right .28s, box-shadow .18s;
+      border-left:1px solid rgba(255,255,255,0.04);
+      z-index:1060;
+      overflow:auto;
+      box-shadow: -18px 0 50px rgba(2,6,23,0.6);
+    }
+    /* light theme override for drawer */
+    body.lightmode .sidebar{
+      background: var(--drawer-bg-dark);
+      color:var(--text-main);
+      border-left:1px solid rgba(2,6,23,0.06);
+      box-shadow: -12px 0 36px rgba(2,6,23,0.06);
+    }
+    .sidebar.show{ right: 0; }
+
+    .sidebar li a{display:block;padding:14px;color:var(--text-main);font-size:18px;text-decoration:none}
+    .sidebar .close-btn{position:absolute;top:18px;right:18px;background:transparent;border:none;color:inherit;font-size:1.1rem}
+
+    #theme-switch{position:fixed;top:88px;right:18px;height:52px;width:52px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);cursor:pointer;z-index:1200;transition:transform .15s}
+    #theme-switch:hover{transform:translateY(-3px)}
+    #theme-switch svg{width:22px;height:22px;display:block;color:var(--text-main)}
+    #theme-switch .icon-sun, #theme-switch .icon-moon{display:none}
+    body.lightmode #theme-switch .icon-sun{display:block}
+    body.lightmode #theme-switch .icon-moon{display:none}
+    body.darkmode #theme-switch .icon-moon{display:block}
+    body.darkmode #theme-switch .icon-sun{display:none}
+
+    main{max-width:var(--max-content-width);margin:20px auto;padding:16px}
+    section{padding:28px 12px}
+
+    .introduction{display:flex;gap:28px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:28px 12px}
+    .intro-text{flex:1;min-width:260px;max-width:720px}
+    .title{font-size:clamp(1.8rem,4.2vw,3.4rem);line-height:1.04;color:var(--text-main);font-weight:var(--heading-weight);letter-spacing:0.6px}
+    .highlight-green{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+    .subtitle{font-size:clamp(1rem,2.2vw,1.2rem);color:var(--muted);margin-top:.4rem;font-weight:700}
+    .description{font-family:"Share Tech Mono",monospace;color:var(--muted);margin-top:12px;max-width:680px;font-size:clamp(.95rem,1.8vw,1.05rem);opacity:var(--muted-opacity)}
+
+    /* -------------------------
+       PHOTO: circular frame with simple hover animation
+       ------------------------- */
+    .image{
+      width:260px;
+      height:260px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      perspective:1200px;            /* needed for 3D tilt */
+      -webkit-perspective:1200px;
+      overflow:visible;
+      margin-left:16px;
+      flex-shrink:0;
+    }
+
+    .photo-inner{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      overflow:hidden;
+      border: 6px solid rgba(255,255,255,0.04);
+      box-shadow: 0 18px 60px rgba(2,6,23,0.45), 0 6px 18px rgba(0,0,0,0.35) inset;
+      transform-style: preserve-3d;
+      transition: transform 260ms cubic-bezier(.2,.9,.3,1), box-shadow 200ms;
+      will-change: transform;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+      transform: translateZ(0) scale(1);
+    }
+
+    .photo-inner img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    /* simplified hovered effect: lift + subtle scale, no spin */
+    .photo-inner.hovered{
+      box-shadow: 0 28px 80px rgba(2,6,23,0.55), 0 8px 22px rgba(0,0,0,0.5) inset;
+      transform: translateZ(18px) scale(1.03);
+    }
+
+    /* center main content text */
+    main, main h1, main h2, main h3, main p, .project-description, .project-content, .tech-list, .skill-item {
+      text-align: center;
+    }
+
+    .projects{text-align:center}
+    .section-title{font-size:clamp(1.4rem,2.4vw,1.9rem);font-weight:700;margin-bottom:18px}
+    .project-list{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
+    .project-card{background:var(--card-bg);border-radius:12px;border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;padding:14px;min-height:160px;cursor:pointer;perspective:1200px;transition:transform .25s}
+    .project-card:focus{outline:2px dashed rgba(255,255,255,0.08);outline-offset:4px}
+
+    .card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .6s}
+    .project-card.flipped .card-inner{transform:rotateY(180deg)}
+    .card-front, .card-back{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12px;border-radius:10px;backface-visibility:hidden}
+    .card-back{transform:rotateY(180deg);background:transparent;color:var(--muted);font-family:"Share Tech Mono",monospace;padding:14px;text-align:center}
+    .project-content{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+    .project-description{font-size:1rem;color:var(--text-main);font-weight:700;letter-spacing:0.6px}
+    .project-btn{padding:8px 16px;border-radius:999px;border:none;background:linear-gradient(90deg,var(--accent-2),var(--accent-3));color:#fff;font-weight:600;cursor:pointer;box-shadow:0 8px 26px rgba(0,0,0,0.15);transition:transform .12s}
+    .project-btn:active{transform:translateY(1px)}
+
+    .about{max-width:900px;margin:0 auto;color:var(--text-main)}
+    .tech-skills{max-width:1200px;margin:0 auto}
+    .tech-lists{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;justify-items:center;align-items:start;text-align:center;padding:8px}
+    .tech-list{background:var(--card-bg);border-radius:12px;padding:16px;border:1px solid var(--glass-border);min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .skill-list{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center;padding-top:8px}
+    .skill-item{background:var(--card-bg);padding:14px 16px;border-radius:10px;border:1px solid var(--glass-border);min-width:200px;text-align:center}
+
+    .contact-icons{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;padding:8px}
+    .contact-icon{width:54px;height:54px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--contact-gradient);color:#fff;text-decoration:none;box-shadow:0 12px 36px rgba(0,0,0,0.12);transition:transform .16s;position:relative}
+    .contact-icon:hover{transform:translateY(-6px)}
+    .contact-icon .tooltip{position:absolute;bottom:140%;left:50%;transform:translateX(-50%) translateY(8px);background:rgba(0,0,0,0.72);color:#fff;padding:6px 10px;border-radius:6px;font-size:.8rem;opacity:0;pointer-events:none;transition:all .12s}
+    .contact-icon:hover .tooltip{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+
+    .email-footer{font-family:"Share Tech Mono",monospace;color:var(--muted);margin-top:12px}
+
+    /* responsive & hamburger behavior */
+    @media (max-width:1100px){
+      .project-list{grid-template-columns:repeat(3,1fr)}
+      .tech-lists{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:900px){
+      .introduction{flex-direction:column;align-items:center;text-align:center}
+      .image{width:200px;height:200px;margin:12px auto} /* centered on mobile */
+      .project-list{grid-template-columns:repeat(2,1fr);gap:14px}
+      nav ul{display:none;} /* hide desktop nav */
+      /* remove the old 86% rule so drawer stays compact */
+      .intro-text, .intro-text * { text-align:center; }
+
+      /* show hamburger and pin to the top-right inside header */
+      .menubutton{
+        display:inline-flex;
+        position:absolute;
+        right:14px;
+        top:calc(50% - 18px); /* center inside 72px header */
+        z-index:1205;
+        background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        border:1px solid var(--glass-border);
+        transition:transform .12s;
+      }
+      .menubutton:active{ transform:translateY(1px); }
+
+      header{ padding:0 12px; }
+    }
+    @media (max-width:480px){
+      .title{font-size:1.9rem}
+      .image{width:160px;height:160px}
+      main{padding:10px}
+      .project-list{grid-template-columns:repeat(1,1fr)}
+      .tech-lists{grid-template-columns:repeat(1,1fr)}
+      #theme-switch{top:78px;right:12px}
+      header{padding:0 12px}
+    }
+
+    /* very small screens: slightly smaller drawer so it doesn't feel huge */
+    @media (max-width:360px){
+      :root{ --drawer-width: 220px; }
+      .sidebar{ width: var(--drawer-width); right: calc(-1 * var(--drawer-width)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader-container" id="loader">
+    <div class="loader" aria-hidden="true"><svg viewBox="0 0 80 80"><circle r="32" cy="40" cx="40" stroke="rgba(255,255,255,0.18)" stroke-width="6" fill="none"></circle></svg></div>
+  </div>
+
+  <header>
+    <div class="logo"><img src="prglogo.png" alt="My logo"></div>
+
+    <!-- Hamburger button: visible on small screens, toggles the sidebar -->
+    <button id="toggle-sidebar" class="menubutton" aria-label="Open menu" aria-expanded="false" title="Open menu">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+        <rect x="3" y="6" width="18" height="2" rx="1"></rect>
+        <rect x="3" y="11" width="18" height="2" rx="1"></rect>
+        <rect x="3" y="16" width="18" height="2" rx="1"></rect>
+      </svg>
+    </button>
+
+    <div class="menu">
+      <nav id="nav-menu">
+        <ul>
+          <li class="hideMobile"><a href="#home" class="nav-link active">HOME</a></li>
+          <li class="hideMobile"><a href="#about" class="nav-link">ABOUT</a></li>
+          <li class="hideMobile"><a href="#contact" class="nav-link">CONTACT</a></li>
+        </ul>
+      </nav>
+
+      <div class="menu-overlay" id="menu-overlay" aria-hidden="true"></div>
+
+      <ul class="sidebar" id="sidebar" aria-hidden="true">
+        <li><button class="close-btn" id="hide-sidebar" aria-label="Close menu">&times;</button></li>
+        <li><a href="#home" class="nav-link">HOME</a></li>
+        <li><a href="#about" class="nav-link">ABOUT</a></li>
+        <li><a href="#contact" class="nav-link">CONTACT</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <button id="theme-switch" aria-label="Toggle theme" aria-pressed="false" title="Toggle theme">
+    <span class="icon-moon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="22" width="22" fill="currentColor"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/></svg></span>
+    <span class="icon-sun" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="22" width="22" fill="currentColor"><path d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"/></svg></span>
+  </button>
+
+  <main class="content" id="content" style="display:none">
+    <section id="home" class="introduction">
+      <div class="intro-text">
+        <h1 class="title">HELLO, I'M <span id="typed-text" class="highlight-green">PRINCE</span><span class="cursor" aria-hidden="true">|</span></h1>
+        <h2 class="subtitle"><span class="highlight-green">JUNIOR PROJECT-BASED</span> FREELANCER.</h2>
+        <p class="description">Junior Project-Based Freelancer experienced in HTML, CSS, and JavaScript. Skilled in building responsive interfaces, debugging, and improving user experience. Passionate about learning and creating accessible projects about technology and digital solutions. </p>
+      </div>
+
+      <div class="intro-image">
+        <div class="image" id="profile-coin" aria-label="Profile picture">
+          <div class="photo-inner" id="photo-inner">
+            <img src="Me.png" alt="Pixel art portrait of Me" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects" aria-labelledby="projects-heading">
+      <h2 id="projects-heading" class="section-title">MY <span class="highlight-green">PROJECTS</span></h2>
+      <div class="project-list" role="list">
+        <div class="project-card" role="listitem" tabindex="0">
+          <div class="card-inner">
+            <div class="card-front">
+              <div class="project-content">
+                <p class="project-description">WASTE MAP</p>
+                <button class="project-btn" data-url="https://prigeez.github.io/wastemap2/" aria-label="Open Calculator project">VIEW</button>
+              </div>
+            </div>
+            <div class="card-back"><p>This was the first project I built when I began learning web development in my first year of college.</p></div>
+          </div>
+        </div>
+
+        <div class="project-card" role="listitem" tabindex="0">
+          <div class="card-inner">
+            <div class="card-front">
+              <div class="project-content">
+                <p class="project-description">QUOTES GENERATOR</p>
+                <button class="project-btn" data-url="https://prigeez.github.io/prince/" aria-label="Open Quotes Generator project">VIEW</button>
+              </div>
+            </div>
+            <div class="card-back"><p>This was the second project I created after learning simple web projects from tutorials.</p></div>
+          </div>
+        </div>
+
+        <div class="project-card" role="listitem" tabindex="0">
+          <div class="card-inner">
+            <div class="card-front">
+              <div class="project-content">
+                <p class="project-description">TIC-TAC-TOE</p>
+                <button class="project-btn" data-url="https://prigeez.github.io/erl/" aria-label="Open Tic-Tac-Toe project">VIEW</button>
+              </div>
+            </div>
+            <div class="card-back"><p>I created this game out of curiosity and to practice logic and UI interaction.</p></div>
+          </div>
+        </div>
+
+        <div class="project-card" role="listitem" tabindex="0">
+          <div class="card-inner">
+            <div class="card-front">
+              <div class="project-content">
+                <p class="project-description">CALCULATOR</p>
+                <button class="project-btn" data-url="https://prigeez.github.io/git/" aria-label="Open Waste Map project">VIEW</button>
+              </div>
+            </div>
+            <div class="card-back"><p>Concept project imagining a business application for mapping waste pickup and locations.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about" aria-labelledby="about-heading">
+      <h2 id="about-heading" class="section-title">ABOUT <span class="highlight-green">ME</span></h2>
+      <p class="about-text">Hi! I’m Prince Benavidez a BSIT student passionate about technology and digital solutions. This website showcases my projects and Project-Based Freelancing Services in web development, programming, and management systems with database.
+I offer affordable student-friendly pricing depending on the project complexity and My Prices may vary based on features and requirements. Thank you for visiting, and I look forward to working with you!</p>
+    </section>
+
+    <section class="tech-skills" aria-labelledby="tech-heading">
+      <h2 id="tech-heading" class="section-title">MY <span class="highlight-green">TECH STACKS</span></h2>
+      <div class="tech-lists">
+        <div class="tech-list"><h3>FRONT-END</h3><ul><li>HTML</li><li>CSS</li><li>BOOTSTRAP</li><li>JAVASCRIPT</li></ul></div>
+        <div class="tech-list"><h3>BACK-END</h3><ul><li>PHP</li><li>PYTHON</li><li>NODE JS</li></ul></div>
+        <div class="tech-list"><h3>DATABASE</h3><ul><li>MYSQL</li><li>NOSQL</li></ul></div>
+        <div class="tech-list"><h3>OTHER</h3><ul><li>C#</li><li>C++</li><li>JAVA</li></ul></div>
+      </div>
+    </section>
+
+    <section class="skills" aria-labelledby="skills-heading">
+      <h2 id="skills-heading" class="section-title">MY <span class="highlight-green">SKILLS</span></h2>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-icon"><i class="fa-solid fa-gem"></i></span><h4><span class="highlight-green">VISUAL</span> DESIGN</h4><p>Create user interface design with unique and modern ideas.</p></div>
+        <div class="skill-item"><span class="skill-icon"><i class="fa-solid fa-graduation-cap"></i></span><h4><span class="highlight-green">UX</span> RESEARCH</h4><p>Design user-focused digital products using modern ideas.</p></div>
+        <div class="skill-item"><span class="skill-icon"><i class="fa-solid fa-brain"></i></span><h4><span class="highlight-green">DESIGN</span> PROTOTYPE</h4><p>Create advanced design prototypes using Figma.</p></div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="section-title">CONTACT <span class="highlight-green">PRINZ</span></h2>
+      <p class="contact-me">CONNECT WITH ME</p>
+      <p class="contact-description">Just contact me if you want to see my other projects I made and I am looking to join a cross-functional team that values improving people's lives through accessible design. Or have a project in mind? Let's connect.</p>
+
+      <div class="contact-icons">
+        <a href="https://github.com/Prigeez" target="_blank" rel="noopener" class="contact-icon github"><span class="tooltip">Prince</span><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+        <a href="https://m.facebook.com/prigeez/" target="_blank" rel="noopener" class="contact-icon facebook"><span class="tooltip">Prince Erl Benavidez</span><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+        <a href="https://www.tiktok.com/@iamrealprigeez?_r=1&_d=secCgYIASAHKAESPgo86WiqGpOlHlOmfVonbWBV9A7kxMnhmraspOLoSGdJAYF8PNaeD3QyQsmex86l%2Fw1MS2iXYTDnVpVCyMUFGgA%3D&_svg=1&checksum=7c085db853273931d5ee5b8d214218dbb76b0a5a7eb65dcbc8dd66a842616d49&item_author_type=1&sec_uid=MS4wLjABAAAAiIS2N_jWlB0Xrqitr1A1MzyuYX_d-Y6DRf8gjHcwPs0xy_qht4iIm6sKTDJMWGA0&sec_user_id=MS4wLjABAAAAiIS2N_jWlB0Xrqitr1A1MzyuYX_d-Y6DRf8gjHcwPs0xy_qht4iIm6sKTDJMWGA0&share_app_id=1180&share_author_id=7181846199367222298&share_link_id=c722f58e-adca-47fb-b369-5ec98ecefb88&share_region=PH&share_scene=1&sharer_language=en&social_share_type=5&source=h5_t&timestamp=1770839443&u_code=e5gcc42d3lh3k4&ug_btm=b8727%2Cb7360&ugbiz_name=ACCOUNT&user_id=7181846199367222298&utm_campaign=client_share&utm_medium=android&utm_source=copy" class="contact-icon email"><span class="tooltip">prinzbenavidez@gmail.com</span><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a> 
+      </div>
+
+      <footer><p class="email-footer">prinzbenavidez@gmail.com</p></footer>
+    </section>
+  </main>
+
+  <script>
+    // helpers
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+    // loader
+    window.addEventListener('load', () => {
+      const loader = $('#loader');
+      const content = $('#content');
+      if(loader) loader.style.display = 'none';
+      if(content) content.style.display = '';
+      if(window.ScrollReveal){
+        const sr = ScrollReveal({ origin:'left', distance:'40px', duration:800, reset:false, viewFactor: 0.15 });
+        sr.reveal('.intro-text', { origin: 'left', distance: '50px', delay: 120 });
+        sr.reveal('.intro-image', { origin: 'top', distance: '40px', delay: 200 });
+        sr.reveal('.project-card', { interval: 100, viewFactor: 0.2 });
+        sr.reveal('.about', { origin: 'bottom', delay: 200 });
+        sr.reveal('.tech-list', { origin: 'right', distance: '40px', delay: 200 });
+        sr.reveal('.skill-item', { interval: 120 });
+        sr.reveal('.contact-icons', { origin: 'bottom', delay: 200 });
+      }
+    });
+
+    // THEME (kept simple)
+    (function(){
+      const THEME_KEY = 'theme';
+      const themeSwitch = document.getElementById('theme-switch');
+      const body = document.body;
+      function applyTheme(theme){
+        body.classList.remove('darkmode','lightmode');
+        if(theme === 'light'){ body.classList.add('lightmode'); themeSwitch.setAttribute('aria-pressed','true'); }
+        else { body.classList.add('darkmode'); themeSwitch.setAttribute('aria-pressed','false'); }
+      }
+      let saved = localStorage.getItem(THEME_KEY) || 'dark';
+      applyTheme(saved);
+      themeSwitch.addEventListener('click', () => {
+        const current = body.classList.contains('lightmode') ? 'light' : 'dark';
+        const next = current === 'light' ? 'dark' : 'light';
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+      });
+    })();
+
+    // NAV / SIDEBAR
+    (function(){
+      const toggleBtn = $('#toggle-sidebar');
+      const hideBtn = $('#hide-sidebar');
+      const sidebar = $('#sidebar');
+      const overlay = $('#menu-overlay');
+      function openSidebar(){ sidebar.classList.add('show'); overlay.classList.add('show'); sidebar.setAttribute('aria-hidden','false'); toggleBtn.setAttribute('aria-expanded','true'); }
+      function closeSidebar(){ sidebar.classList.remove('show'); overlay.classList.remove('show'); sidebar.setAttribute('aria-hidden','true'); toggleBtn.setAttribute('aria-expanded','false'); }
+      if(toggleBtn) toggleBtn.addEventListener('click', e => { e.stopPropagation(); sidebar.classList.contains('show') ? closeSidebar() : openSidebar(); });
+      if(hideBtn) hideBtn.addEventListener('click', closeSidebar);
+      if(overlay) overlay.addEventListener('click', closeSidebar);
+      $$('.sidebar a').forEach(a => a.addEventListener('click', closeSidebar));
+    })();
+
+    // profile behavior: tilt on pointer move, simple hover (no spin)
+    (function(){
+      const image = document.getElementById('profile-coin');
+      const inner = document.getElementById('photo-inner');
+      if(!image || !inner) return;
+
+      // map a value from range to range
+      const map = (value, inMin, inMax, outMin, outMax) => {
+        return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+      };
+
+      // pointer / mouse move tilt (desktop)
+      function handlePointerMove(e){
+        const rect = image.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        // support both touch and mouse events
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const dx = clientX - cx;
+        const dy = clientY - cy;
+        // normalize to -1..1
+        const nx = dx / (rect.width / 2);
+        const ny = dy / (rect.height / 2);
+        // clamp
+        const clampedX = Math.max(-1, Math.min(1, nx));
+        const clampedY = Math.max(-1, Math.min(1, ny));
+        // rotate ranges (smaller for rotateX to keep it natural)
+        const rotateY = map(clampedX, -1, 1, 14, -14); // left -> positive Y rotation
+        const rotateX = map(clampedY, -1, 1, -10, 10); // top -> negative X rotation
+        // apply transform to outer container (keeps inner hover transform working)
+        image.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+      }
+
+      function handlePointerEnter(){
+        // apply a subtle hovered effect to the inner element (no spin)
+        inner.classList.add('hovered');
+      }
+      function handlePointerLeave(){
+        inner.classList.remove('hovered');
+        // reset transforms smoothly
+        image.style.transition = 'transform 420ms cubic-bezier(.2,.9,.3,1)';
+        image.style.transform = 'none';
+        setTimeout(()=> image.style.transition = '', 430);
+      }
+
+      // Desktop mouse events
+      image.addEventListener('mouseenter', handlePointerEnter);
+      image.addEventListener('mousemove', handlePointerMove);
+      image.addEventListener('mouseleave', handlePointerLeave);
+
+      // Touch support: apply same simple effect on touchstart, follow finger, stop on touchend
+      image.addEventListener('touchstart', (e) => { handlePointerEnter(); handlePointerMove(e); }, {passive:true});
+      image.addEventListener('touchmove', (e) => { handlePointerMove(e); }, {passive:true});
+      image.addEventListener('touchend', () => { handlePointerLeave(); });
+    })();
+
+    // remaining interactions (typed text, projects, scroll nav)
+    (function(){
+      // typed text
+      const words = ["PRINCE","IT","STUDENT","PROGRAMMER"];
+      const typedTextSpan = document.getElementById("typed-text");
+      if(typedTextSpan){
+        let wordIndex = 0, charIndex = 0, typing = true;
+        function tick(){
+          const word = words[wordIndex];
+          if(typing){
+            charIndex++;
+            if(charIndex > word.length){ typing = false; setTimeout(tick, 1000); return; }
+          } else {
+            charIndex--;
+            if(charIndex < 0){ typing = true; wordIndex = (wordIndex + 1) % words.length; setTimeout(tick, 300); return; }
+          }
+          typedTextSpan.textContent = word.substring(0, charIndex);
+          setTimeout(tick, typing ? 120 : 80);
+        }
+        tick();
+      }
+
+      // project buttons
+      $$('.project-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const url = btn.getAttribute('data-url');
+          if(url) window.open(url, '_blank', 'noopener');
+        });
+      });
+
+      // card flip toggles
+      $$('.project-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if(e.target.closest('.project-btn')) return;
+          card.classList.toggle('flipped');
+        });
+        card.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.classList.toggle('flipped'); }
+        });
+      });
+
+      // active nav on scroll
+      const sections = Array.from(document.querySelectorAll('section[id]'));
+      const navLinks = Array.from(document.querySelectorAll('nav ul li a, .sidebar a'));
+      function onScroll(){
+        const scrollY = window.pageYOffset;
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 90;
+          const sectionHeight = section.offsetHeight;
+          const id = section.id;
+          if(scrollY >= sectionTop && scrollY < sectionTop + sectionHeight){
+            navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${id}`));
+          }
+        });
+      }
+      window.addEventListener('scroll', onScroll, {passive:true});
+      onScroll();
+    })();
+  </script>
+</body>
+</html>
