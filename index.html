@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#0f1724" />
-  <title>Prince Erl Benavidez Portfolio</title>
+  <title>Prince Erl Benavidez</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://unpkg.com/scrollreveal" defer></script>
@@ -37,9 +37,9 @@
       --header-border-light: rgba(2,6,23,0.06);
       --header-shadow-light: 0 6px 18px rgba(2,6,23,0.06);
 
-      --drawer-width: 260px;
-      --drawer-bg-dark: #071226;
-      --drawer-bg-light: #ffffff;
+      --drawer-width: 320px;
+      --drawer-bg-dark: linear-gradient(180deg,#071226,#02111b);
+      --drawer-bg-light: linear-gradient(180deg,#ffffff,#f7fafc);
     }
 
     body.lightmode{
@@ -107,47 +107,121 @@
     nav a{color:var(--text-main);text-decoration:none;font-weight:600;letter-spacing:0.6px;padding:8px 12px;border-radius:999px;transition:all .18s;font-size:0.95rem}
     nav a.active, nav a:hover{background:var(--text-main);color:var(--bg-color);transform:translateY(-2px);box-shadow:0 8px 20px rgba(2,6,23,0.12)}
 
+    /* Burger button */
     .menubutton{
       display:none;
       background:transparent;
       border:none;
       color:inherit;
       padding:8px;
-      border-radius:8px;
+      border-radius:10px;
       cursor:pointer;
       align-items:center;
       justify-content:center;
     }
     .menubutton svg{ width:28px; height:28px; display:block; }
+    /* utility when we hide the menu button while drawer is open */
+    .menubutton.hidden{ display:none !important; }
 
+    /* Overlay */
     .menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1050;opacity:0;pointer-events:none;transition:opacity .18s}
     .menu-overlay.show{opacity:1;pointer-events:auto}
 
+    /* Modern drawer */
     .sidebar{
       position:fixed;
-      top:0;
+      top:28px;
       right:calc(-1 * var(--drawer-width));
-      height:100vh;
+      height:calc(100vh - 56px);
       width:var(--drawer-width);
-      background: linear-gradient(180deg, var(--drawer-bg-dark), #02111b);
-      padding:78px 18px;
-      transition:right .28s, box-shadow .18s;
-      border-left:1px solid rgba(255,255,255,0.04);
+      background: var(--drawer-bg-dark);
+      padding:28px 20px;
+      transition:right .32s cubic-bezier(.2,.9,.25,1), box-shadow .2s;
+      border-left: 1px solid rgba(255,255,255,0.04);
       z-index:1060;
       overflow:auto;
-      box-shadow: -18px 0 50px rgba(2,6,23,0.6);
+      box-shadow: -28px 30px 80px rgba(2,6,23,0.6);
+      border-radius:14px 0 0 14px;
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      align-items:stretch;
     }
     body.lightmode .sidebar{
-      background: var(--drawer-bg-dark);
+      background: var(--drawer-bg-light);
+      border-left: 1px solid var(--header-border-light);
+      box-shadow: -12px 20px 48px rgba(2,6,23,0.06);
       color:var(--text-main);
-      border-left:1px solid rgba(2,6,23,0.06);
-      box-shadow: -12px 0 36px rgba(2,6,23,0.06);
     }
-    .sidebar.show{ right: 0; }
-    .sidebar li a{display:block;padding:14px;color:var(--text-main);font-size:18px;text-decoration:none}
-    .sidebar .close-btn{position:absolute;top:18px;right:18px;background:transparent;border:none;color:inherit;font-size:1.1rem}
+    .sidebar.show{ right: 18px; } /* slight inset from the edge for modern look */
 
-    #theme-switch{position:fixed;top:88px;right:18px;height:52px;width:52px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);cursor:pointer;z-index:1200;transition:transform .15s}
+    /* Drawer header area */
+    .drawer-head{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      justify-content:space-between;
+    }
+    .drawer-brand{display:flex;gap:12px;align-items:center}
+    .drawer-brand img{height:44px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.35)}
+    .drawer-title{font-weight:700;letter-spacing:0.6px}
+    .drawer-close{
+      background:transparent;
+      border:none;
+      color:inherit;
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      cursor:pointer;
+      transition:transform .12s, background .12s;
+    }
+    .drawer-close:hover{ transform:translateY(-3px); background:rgba(255,255,255,0.02) }
+
+    /* Nav list */
+    .drawer-nav{ display:flex; flex-direction:column; gap:8px; margin-top:8px; padding-top:4px }
+    .drawer-nav a{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:12px 14px;
+      border-radius:10px;
+      text-decoration:none;
+      color:var(--text-main);
+      font-weight:700;
+      background:transparent;
+      transition:background .12s, transform .12s;
+    }
+    .drawer-nav a:hover, .drawer-nav a.active{
+      background: rgba(255,255,255,0.03);
+      transform:translateX(-4px);
+    }
+    .drawer-nav a i{ width:20px; text-align:center; color:var(--accent-2) }
+
+    /* Footer in drawer */
+    .drawer-footer{ margin-top:auto; font-family:"Share Tech Mono",monospace; color:var(--muted); text-align:center; padding:12px 4px; font-size:.9rem }
+
+    /* Theme switch now lives next to the burger inside header */
+    #theme-switch{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:44px;
+      width:44px;
+      border-radius:10px;
+      margin-left:8px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid var(--glass-border);
+      cursor:pointer;
+      z-index:1200;
+      transition:transform .15s;
+    }
     #theme-switch:hover{transform:translateY(-3px)}
     #theme-switch svg{width:22px;height:22px;display:block;color:var(--text-main)}
     #theme-switch .icon-sun, #theme-switch .icon-moon{display:none}
@@ -156,6 +230,41 @@
     body.darkmode #theme-switch .icon-moon{display:block}
     body.darkmode #theme-switch .icon-sun{display:none}
 
+    /* header layout tweaks: place burger in right side of nav bar */
+    .header-left { display:flex; align-items:center; gap:12px; }
+    .header-center { display:flex; align-items:center; gap:12px; flex:1; justify-content:center; }
+    .header-right { display:flex; align-items:center; gap:8px; justify-content:flex-end; }
+
+    /* small-screen layout */
+    @media (max-width:900px){
+      .header-center{ justify-content:flex-start; margin-left:12px; }
+      nav ul{display:none;}
+      .menubutton{
+        display:inline-flex;
+        position:relative;
+        right:auto;
+        top:auto;
+        z-index:1205;
+        background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        border:1px solid var(--glass-border);
+      }
+      #theme-switch{ display:inline-flex; }
+      header{ padding:0 12px; }
+    }
+
+    @media (min-width:901px){
+      /* If you prefer the burger visible on large screens too, remove this rule.
+         By default the burger remains hidden on wide screens (common pattern). */
+      .menubutton { display:none; }
+    }
+
+    @media (max-width:480px){
+      .drawer-nav a{ padding:12px }
+      :root{ --drawer-width: 260px; }
+      #theme-switch{ height:40px; width:40px; margin-left:6px; }
+    }
+
+    /* existing page styles (kept mostly intact) */
     main{max-width:var(--max-content-width);margin:20px auto;padding:16px}
     section{padding:28px 12px}
 
@@ -166,40 +275,10 @@
     .subtitle{font-size:clamp(1rem,2.2vw,1.2rem);color:var(--muted);margin-top:.4rem;font-weight:700}
     .description{font-family:"Share Tech Mono",monospace;color:var(--muted);margin-top:12px;max-width:680px;font-size:clamp(.95rem,1.8vw,1.05rem);opacity:var(--muted-opacity)}
 
-    .image{
-      width:260px;
-      height:260px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:50%;
-      perspective:1200px;
-      overflow:visible;
-      margin-left:16px;
-      flex-shrink:0;
-    }
-
-    .photo-inner{
-      width:100%;
-      height:100%;
-      border-radius:50%;
-      overflow:hidden;
-      border: 6px solid rgba(255,255,255,0.04);
-      box-shadow: 0 18px 60px rgba(2,6,23,0.45), 0 6px 18px rgba(0,0,0,0.35) inset;
-      transform-style: preserve-3d;
-      transition: transform 260ms cubic-bezier(.2,.9,.3,1), box-shadow 200ms;
-      will-change: transform;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
-      transform: translateZ(0) scale(1);
-    }
-
+    .image{ width:260px; height:260px; display:flex; align-items:center; justify-content:center; border-radius:50%; perspective:1200px; overflow:visible; margin-left:16px; flex-shrink:0; }
+    .photo-inner{ width:100%; height:100%; border-radius:50%; overflow:hidden; border: 6px solid rgba(255,255,255,0.04); box-shadow: 0 18px 60px rgba(2,6,23,0.45), 0 6px 18px rgba(0,0,0,0.35) inset; transform-style: preserve-3d; transition: transform 260ms cubic-bezier(.2,.9,.3,1), box-shadow 200ms; will-change: transform; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00)); transform: translateZ(0) scale(1); }
     .photo-inner img{ width:100%; height:100%; object-fit:cover; display:block; }
-
     .photo-inner.hovered{ box-shadow: 0 28px 80px rgba(2,6,23,0.55), 0 8px 22px rgba(0,0,0,0.5) inset; transform: translateZ(18px) scale(1.03); }
-
-    main, main h1, main h2, main h3, main p, .project-description, .project-content, .tech-list, .skill-item {
-      text-align: center;
-    }
 
     .projects{text-align:center}
     .section-title{font-size:clamp(1.4rem,2.4vw,1.9rem);font-weight:700;margin-bottom:18px}
@@ -239,39 +318,27 @@
       .introduction{flex-direction:column;align-items:center;text-align:center}
       .image{width:200px;height:200px;margin:12px auto}
       .project-list{grid-template-columns:repeat(2,1fr);gap:14px}
-      nav ul{display:none;}
       .intro-text, .intro-text * { text-align:center; }
-
-      .menubutton{
-        display:inline-flex;
-        position:absolute;
-        right:14px;
-        top:calc(50% - 18px);
-        z-index:1205;
-        background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-        border:1px solid var(--glass-border);
-        transition:transform .12s;
-      }
-      .menubutton:active{ transform:translateY(1px); }
-
-      header{ padding:0 12px; }
     }
-    @media (max-width:480px){
-      .title{font-size:1.9rem}
-      .image{width:160px;height:160px}
-      main{padding:10px}
-      .project-list{grid-template-columns:repeat(1,1fr)}
-      .tech-lists{grid-template-columns:repeat(1,1fr)}
-      #theme-switch{top:78px;right:12px}
-      header{padding:0 12px}
-    }
-
     @media (max-width:360px){
-      :root{ --drawer-width: 220px; }
+      :root{ --drawer-width: 260px; }
       .sidebar{ width: var(--drawer-width); right: calc(-1 * var(--drawer-width)); }
     }
 
     .project-btn, .menubutton, .contact-icon, #theme-switch { min-height:44px; min-width:44px }
+
+    /* PROJECT VIDEOS SECTION */
+    .project-videos{text-align:center}
+    .video-list{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;align-items:stretch}
+    .video-card{background:var(--card-bg);border-radius:12px;border:1px solid var(--glass-border);padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .video-frame{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000}
+    .video-frame video, .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+    .video-caption{font-size:1rem;font-weight:700;letter-spacing:.4px;color:var(--text-main)}
+    .video-desc{font-family:"Share Tech Mono",monospace;color:var(--muted);font-size:.9rem;opacity:var(--muted-opacity)}
+
+    @media (max-width:900px){
+      .video-list{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -280,17 +347,11 @@
   </div>
 
   <header>
-    <div class="logo"><img src="przlogo.png" alt="My logo"></div>
+    <div class="header-left">
+      <div class="logo"><img src="przlogo.png" alt="My logo"></div>
+    </div>
 
-    <button id="toggle-sidebar" class="menubutton" aria-label="Open menu" aria-expanded="false" title="Open menu">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
-        <rect x="3" y="6" width="18" height="2" rx="1"></rect>
-        <rect x="3" y="11" width="18" height="2" rx="1"></rect>
-        <rect x="3" y="16" width="18" height="2" rx="1"></rect>
-      </svg>
-    </button>
-
-    <div class="menu" style="flex:1;display:flex;justify-content:flex-end;align-items:center">
+    <div class="header-center">
       <nav id="nav-menu" aria-label="Primary">
         <ul>
           <li class="hideMobile"><a href="#home" class="nav-link active">HOME</a></li>
@@ -298,27 +359,54 @@
           <li class="hideMobile"><a href="#contact" class="nav-link">CONTACT</a></li>
         </ul>
       </nav>
-
-      <div class="menu-overlay" id="menu-overlay" aria-hidden="true"></div>
-
-      <ul class="sidebar" id="sidebar" aria-hidden="true" role="menu">
-        <li><button class="close-btn" id="hide-sidebar" aria-label="Close menu">&times;</button></li>
-        <li role="none"><a role="menuitem" href="#home" class="nav-link">HOME</a></li>
-        <li role="none"><a role="menuitem" href="#about" class="nav-link">ABOUT</a></li>
-        <li role="none"><a role="menuitem" href="#contact" class="nav-link">CONTACT</a></li>
-      </ul>
     </div>
+
+    <div class="header-right">
+      <!-- Theme switch stays visible and is placed to the left of the burger on the right side -->
+      <button id="theme-switch" aria-label="Toggle theme" aria-pressed="false" title="Toggle theme">
+        <span class="icon-moon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="22" width="22" fill="currentColor"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/></svg></span>
+        <span class="icon-sun" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="22" width="22" fill="currentColor"><path d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"/></svg></span>
+      </button>
+
+      <button id="toggle-sidebar" class="menubutton" aria-label="Open menu" aria-expanded="false" title="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+          <rect x="3" y="6" width="18" height="2" rx="1"></rect>
+          <rect x="3" y="11" width="18" height="2" rx="1"></rect>
+          <rect x="3" y="16" width="18" height="2" rx="1"></rect>
+        </svg>
+      </button>
+    </div>
+
+    <div style="position:absolute;inset:0;pointer-events:none;"></div>
   </header>
 
-  <button id="theme-switch" aria-label="Toggle theme" aria-pressed="false" title="Toggle theme">
-    <span class="icon-moon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="22" width="22" fill="currentColor"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/></svg></span>
-    <span class="icon-sun" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="22" width="22" fill="currentColor"><path d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"/></svg></span>
-  </button>
+  <div class="menu-overlay" id="menu-overlay" aria-hidden="true"></div>
+
+  <aside class="sidebar" id="sidebar" aria-hidden="true" role="menu" aria-label="Main menu">
+    <div class="drawer-head">
+      <div class="drawer-brand" role="presentation">
+        <img src="przlogo.png" alt="" aria-hidden="true">
+        <div>
+          <div class="drawer-title">PRINCE ERL BENAVIDEZ</div>
+          <div style="font-size:.85rem;color:var(--muted)">Portfolio</div>
+        </div>
+      </div>
+      <button class="drawer-close" id="hide-sidebar" aria-label="Close menu">&times;</button>
+    </div>
+
+    <nav class="drawer-nav" aria-label="Drawer primary">
+      <a role="menuitem" href="#home" class="nav-link" id="drawer-home"><i class="fa-solid fa-house"></i>HOME</a>
+      <a role="menuitem" href="#about" class="nav-link" id="drawer-about"><i class="fa-solid fa-user"></i>ABOUT</a>
+      <a role="menuitem" href="#contact" class="nav-link" id="drawer-contact"><i class="fa-solid fa-envelope"></i>CONTACT</a>
+    </nav>
+
+    <div class="drawer-footer" aria-hidden="true">Press Esc to close · Accessible menu</div>
+  </aside>
 
   <main class="content" id="content" style="display:none">
     <section id="home" class="introduction" aria-labelledby="home-heading">
       <div class="intro-text">
-        <h1 class="title" id="home-heading">HELLO, I'M <span id="typed-text" class="highlight-green">PRINCE</span><span class="cursor" aria-hidden="true">|</span></h1>
+        <h1 class="title" id="home-heading">HELLO, I'M <span id="typed-text" class="highlight-green">PRINCE ERL</span><span class="cursor" aria-hidden="true">|</span></h1>
         <h2 class="subtitle"><span class="highlight-green">JUNIOR PROJECT-BASED</span> FREELANCER.</h2>
         <p class="description">Junior Project-Based Freelancer experienced in HTML, CSS, and JavaScript. Skilled in building responsive interfaces, debugging, and improving user experience. Passionate about learning and creating accessible projects about technology and digital solutions.</p>
       </div>
@@ -339,8 +427,8 @@
           <div class="card-inner">
             <div class="card-front">
               <div class="project-content">
-                <p class="project-description">WASTE MAP</p>
-                <button class="project-btn" data-url="https://prigeez.github.io/wastemap2/" aria-label="Open Waste Map project">VIEW</button>
+                <p class="project-description">MULTI-APPOINTMENTS</p>
+                <button class="project-btn" data-url="https://prigeez.github.io/Suki/" aria-label="Open Waste Map project">VIEW</button>
               </div>
             </div>
             <div class="card-back"><p>Concept project imagining a business application for mapping waste pickup and locations.</p></div>
@@ -351,11 +439,11 @@
           <div class="card-inner">
             <div class="card-front">
               <div class="project-content">
-                <p class="project-description">EXPENSE TRACKER</p>
-                <button class="project-btn" data-url="https://prigeez.github.io/tracker/" aria-label="Open Quotes Generator project">VIEW</button>
+                <p class="project-description">WASTE MAP</p>
+                <button class="project-btn" data-url="https://prigeez.github.io/wastemap2/" aria-label="Open Quotes Generator project">VIEW</button>
               </div>
             </div>
-            <div class="card-back"><p>This was the second project I created after learning simple web projects from tutorials.</p></div>
+            <div class="card-back"><p>Concept project imagining a business application for mapping waste pickup and locations.</p></div>
           </div>
         </div>
 
@@ -385,19 +473,46 @@
       </div>
     </section>
 
+    <section id="project-videos" class="project-videos" aria-labelledby="project-videos-heading">
+      <h2 id="project-videos-heading" class="section-title">PROJECT <span class="highlight-green">VIDEOS</span></h2>
+      <div class="video-list" role="list">
+        <div class="video-card" role="listitem">
+          <div class="video-frame">
+            <video controls preload="metadata" poster="">
+              <source src="videos/wastemap-demo.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p class="video-caption">WASTE MAP — Demo</p>
+          <p class="video-desc">Walkthrough of the waste pickup mapping concept.</p>
+        </div>
+
+        <div class="video-card" role="listitem">
+          <div class="video-frame">
+            <video controls preload="metadata" poster="">
+              <source src="videos/event-demo.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p class="video-caption">MULTI APPOINTMENTS — Demo</p>
+          <p class="video-desc">Overview of Multi-Appointments One place for all your regular providers — see real-time availability and book instantly.</p>
+        </div>
+      </div>
+    </section>
+
     <section id="about" class="about" aria-labelledby="about-heading">
-      <h2 id="about-heading" class="section-title">ABOUT <span class="highlight-green">ME</span></h2>
-      <p class="about-text">Hi! I’m Prince Benavidez a BSIT student passionate about technology and digital solutions. This website showcases my projects and Project-Based Freelancing Services in web development, programming, and management systems with database.
+      <h2 id="about-heading" class="section-title">ABOUT ME<span class="highlight-green">ME</span></h2>
+      <p class="about-text">Hi! I’m Prince Benavidez a BSIT Major in Information Security passionate about technology and digital solutions. This website showcases my projects and Project-Based Freelancing Services in web development, programming, and management systems with database.
 I offer affordable student-friendly pricing depending on the project complexity and My Prices may vary based on features and requirements. Thank you for visiting, and I look forward to working with you!</p>
     </section>
 
     <section class="tech-skills" aria-labelledby="tech-heading">
       <h2 id="tech-heading" class="section-title">MY <span class="highlight-green">TECH STACKS</span></h2>
       <div class="tech-lists">
-        <div class="tech-list"><h3>FRONT-END</h3><ul><li>HTML</li><li>CSS</li><li>BOOTSTRAP</li><li>JAVASCRIPT</li></ul></div>
-        <div class="tech-list"><h3>BACK-END</h3><ul><li>PHP</li><li>PYTHON</li><li>NODE JS</li></ul></div>
-        <div class="tech-list"><h3>DATABASE</h3><ul><li>MYSQL</li><li>NOSQL</li></ul></div>
-        <div class="tech-list"><h3>OTHER</h3><ul><li>C#</li><li>C++</li><li>JAVA</li></ul></div>
+        <div class="tech-list"><h3>FRONT-END</h3><ul><li>HTML</li><li>CSS</li><li>BOOTSTRAP</li><li>JAVASCRIPT</li><li>REACTJS</li><li>TAILWIND CSS</li></ul></div>
+        <div class="tech-list"><h3>BACK-END</h3><ul><li>PHP</li><li>PYTHON</li><li>NODE JS</li><li>REST APIs</li><li>FETCH APIs</li></ul></div>
+        <div class="tech-list"><h3>DATABASE</h3><ul><li>MYSQL</li><li>MONGODB</li><li>POSTRESQL</li></ul></div>
+        <div class="tech-list"><h3>OTHER</h3><ul><li>JAVA</li><li>C++</li><li>C#</li></ul></div>
       </div>
     </section>
 
@@ -417,8 +532,9 @@ I offer affordable student-friendly pricing depending on the project complexity 
 
       <div class="contact-icons">
         <a href="https://github.com/Prigeez" target="_blank" rel="noopener noreferrer" class="contact-icon github"><span class="tooltip">Prince</span><i class="fa-brands fa-github" aria-hidden="true"></i></a>
-        <a href="https://m.facebook.com/prigeez/" target="_blank" rel="noopener noreferrer" class="contact-icon facebook"><span class="tooltip">Prince Erl Benavidez</span><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
-        <a href="https://www.tiktok.com/@iamrealprigeez" target="_blank" rel="noopener noreferrer" class="contact-icon tiktok"><span class="tooltip">prinzbenavidez@gmail.com</span><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+        <a href="https://www.tiktok.com/@iamrealprigeez" target="_blank" rel="noopener noreferrer" class="contact-icon tiktok"><span class="tooltip">iamrealprigeez</span><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+        <a href="https://t.me/@prinzbenavidez" target="_blank" rel="noopener noreferrer" class="contact-icon telegram"><span class="tooltip">Telegram</span><i class="fa-brands fa-telegram" aria-hidden="true"></i></a>
+        <a href="https://wa.me/09273601571" target="_blank" rel="noopener noreferrer" class="contact-icon whatsapp"><span class="tooltip">WhatsApp</span><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
       </div>
 
       <footer><p class="email-footer">prinzbenavidez@gmail.com</p></footer>
@@ -446,6 +562,7 @@ I offer affordable student-friendly pricing depending on the project complexity 
         sr.reveal('.intro-text', { origin: 'left', distance: '50px', delay: 120 });
         sr.reveal('.intro-image', { origin: 'top', distance: '40px', delay: 200 });
         sr.reveal('.project-card', { interval: 100, viewFactor: 0.2 });
+        sr.reveal('.video-card', { interval: 100, viewFactor: 0.2 });
         sr.reveal('.about', { origin: 'bottom', delay: 200 });
         sr.reveal('.tech-list', { origin: 'right', distance: '40px', delay: 200 });
         sr.reveal('.skill-item', { interval: 120 });
@@ -453,7 +570,7 @@ I offer affordable student-friendly pricing depending on the project complexity 
       }
     });
 
-    (function(){//Developed By Prince Erl Benavidez
+    (function(){// Theme switch logic (kept the same)
       const THEME_KEY = 'theme';
       const themeSwitch = document.getElementById('theme-switch');
       const body = document.body;
@@ -478,21 +595,74 @@ I offer affordable student-friendly pricing depending on the project complexity 
       }
     })();
 
-    (function(){//Developed By Prince Erl Benavidez
+    (function(){// Modern drawer behavior + improved accessibility
       const toggleBtn = $('#toggle-sidebar');
       const hideBtn = $('#hide-sidebar');
       const sidebar = $('#sidebar');
       const overlay = $('#menu-overlay');
-      function openSidebar(){ sidebar.classList.add('show'); overlay.classList.add('show'); sidebar && sidebar.setAttribute('aria-hidden','false'); toggleBtn && toggleBtn.setAttribute('aria-expanded','true'); }
-      function closeSidebar(){ sidebar.classList.remove('show'); overlay.classList.remove('show'); sidebar && sidebar.setAttribute('aria-hidden','true'); toggleBtn && toggleBtn.setAttribute('aria-expanded','false'); }
-      if(toggleBtn) toggleBtn.addEventListener('click', e => { e.stopPropagation(); sidebar.classList.contains('show') ? closeSidebar() : openSidebar(); });
-      if(hideBtn) hideBtn.addEventListener('click', closeSidebar);
-      if(overlay) overlay.addEventListener('click', closeSidebar);
-      $$('.sidebar a').forEach(a => a.addEventListener('click', closeSidebar));
-      document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeSidebar(); });
+      const firstMenuItem = $('#drawer-home');
+      const menuLinks = $$('.drawer-nav a');
+
+      function openSidebar(){
+        sidebar.classList.add('show');
+        overlay.classList.add('show');
+        sidebar && sidebar.setAttribute('aria-hidden','false');
+        toggleBtn && toggleBtn.setAttribute('aria-expanded','true');
+        // hide burger when drawer is open
+        if(toggleBtn) toggleBtn.classList.add('hidden');
+        // focus the first link for keyboard users
+        setTimeout(()=> {
+          if(firstMenuItem) firstMenuItem.focus();
+        }, 220);
+      }
+      function closeSidebar(){
+        sidebar.classList.remove('show');
+        overlay.classList.remove('show');
+        sidebar && sidebar.setAttribute('aria-hidden','true');
+        toggleBtn && toggleBtn.setAttribute('aria-expanded','false');
+        // show burger again when closing
+        if(toggleBtn) toggleBtn.classList.remove('hidden');
+        // return focus to burger for accessibility
+        setTimeout(()=> {
+          if(toggleBtn) toggleBtn.focus();
+        }, 120);
+      }
+
+      if(toggleBtn) toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = sidebar.classList.contains('show');
+        if(isOpen) closeSidebar();
+        else openSidebar();
+      });
+
+      if(hideBtn) hideBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeSidebar();
+      });
+      if(overlay) overlay.addEventListener('click', (e) => {
+        closeSidebar();
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape') closeSidebar();
+      });
+
+      // Clicking any nav link closes the sidebar and restores the burger
+      menuLinks.forEach(a => {
+        a.addEventListener('click', (e) => {
+          // let default navigation happen (anchor), then close
+          closeSidebar();
+        });
+      });
+
+      // ensure correct initial state if JS runs after a saved aria-expanded
+      if(sidebar.classList.contains('show')){
+        if(toggleBtn) toggleBtn.classList.add('hidden');
+      }
     })();
 
-    (function(){//Developed By Prince Erl Benavidez
+    (function(){// Image tilt and project interactions (kept unchanged)
       const image = document.getElementById('profile-coin');
       const inner = document.getElementById('photo-inner');
       if(!image || !inner) return;
@@ -527,8 +697,8 @@ I offer affordable student-friendly pricing depending on the project complexity 
       image.addEventListener('touchend', () => { handlePointerLeave(); });
     })();
 
-    (function(){//Developed By Prince Erl Benavidez
-      const words = ["PRINCE","IT","STUDENT","PROGRAMMER"];
+    (function(){// Typed text + project cards behavior (kept unchanged)
+      const words = ["PRINCE ERL","JUNIOR FRONT-END DEVELOPER","MAJOR IN INFO-SEC","PROGRAMMER"];
       const typedTextSpan = document.getElementById("typed-text");
       if(typedTextSpan){
         let wordIndex = 0, charIndex = 0, typing = true;
@@ -585,7 +755,7 @@ I offer affordable student-friendly pricing depending on the project complexity 
             navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${id}`));
           }
         });
-      }//Developed By Prince Erl Benavidez
+      }
       window.addEventListener('scroll', onScroll, {passive:true});
       onScroll();
     })();
